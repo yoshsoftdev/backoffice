@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>DGOS Backoffice</h2>
+    </div>
+    
+    <div id="login-form">
+      <div class="form-group">
+        <label for="username">Username/Email</label>
+        <input type="text" id="username" placeholder="Enter username or email">
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+      </div>
+      
+      <div class="form-group">
+        <label for="database">Database</label>
+        <input type="text" id="database" value="DGOS" readonly>
+      </div>
+      
+      <button id="login-btn" class="btn btn-primary">Login</button>
+      <div id="error-msg" class="error"></div>
+    </div>
+    
+    <div id="logged-in-view" style="display: none;">
+      <div class="form-group">
+        <label for="username-display">Username/Email</label>
+        <input type="text" id="username-display" readonly>
+      </div>
+      
+      <div class="form-group">
+        <label for="user-id-display">User ID</label>
+        <input type="text" id="user-id-display" readonly>
+      </div>
+      
+      <div class="status-indicator">
+        <span class="saved-icon">✓</span>
+        <span class="status-text">Logged in</span>
+      </div>
+      
+      <button id="logout-btn" class="btn btn-secondary">Logout</button>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
