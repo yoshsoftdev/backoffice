@@ -78,7 +78,7 @@ function authenticate(database, username, password) {
     if (data.error) {
       throw new Error(data.error.message || 'Authentication failed');
     }
-    return data.result;
+    return data.result; // Returns user ID (number)
   });
 }
 

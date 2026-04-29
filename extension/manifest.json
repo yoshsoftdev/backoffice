@@ -2,11 +2,19 @@
   "manifest_version": 3,
   "name": "DGOS Backoffice",
   "version": "1.0",
-  "description": "DGOS Odoo Backoffice Chrome Extension",
+  "description": "DGOS Backoffice Chrome Extension",
   "action": {
     "default_popup": "popup.html"
   },
   "permissions": [
     "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/in/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
   ]
 }

@@ -85,7 +85,53 @@ curl -X POST https://api-backoffice.dgos.id/jsonrpc \
 }
 ```
 
-## 5. Query Activities/Lognotes by Partner ID
+## 5. Create New Partner
+
+### Create a new partner record
+```bash
+curl -X POST https://api-backoffice.dgos.id/jsonrpc \
+  -H "Content-Type: application/json" \
+  -H "api-key: 4ff1bf4a0583d1738e1c68eed5002ceb77c10037" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "call",
+    "params": {
+      "service": "object",
+      "method": "execute_kw",
+      "args": [
+        "DGOS",
+        9,
+        "Rahasia!@#$%6",
+        "res.partner",
+        "create",
+        [
+          {
+            "name": "Test Partner",
+            "function": "Software Engineer",
+            "city": "Jakarta",
+            "x_linkedin_profile": "https://www.linkedin.com/in/test-partner/",
+            "comment": "headline",
+            "image_1920": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+          }
+        ]
+      ]
+    },
+    "id": 5
+  }'
+```
+
+**Response Example**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "result": 130
+}
+```
+
+**Response**: Returns the ID of the newly created partner (e.g., `130`)
+
+## 6. Query Activities/Lognotes by Partner ID
 
 ### Get all messages and notes for a specific partner
 ```bash
@@ -154,18 +200,63 @@ curl -X POST https://api-backoffice.dgos.id/jsonrpc \
 }
 ```
 
-## 6. Field Mapping
+### Create a new activity/lognote for a partner
+```bash
+curl -X POST https://api-backoffice.dgos.id/jsonrpc \
+  -H "Content-Type: application/json" \
+  -H "api-key: 4ff1bf4a0583d1738e1c68eed5002ceb77c10037" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "call",
+    "params": {
+      "service": "object",
+      "method": "execute_kw",
+      "args": [
+        "DGOS",
+        9,
+        "Rahasia!@#$%6",
+        "mail.message",
+        "create",
+        [
+          {
+            "res_id": 130,
+            "model": "res.partner",
+            "body": "<p>Test note created via API</p>",
+            "message_type": "comment",
+            "subtype_id": 2
+          }
+        ]
+      ]
+    },
+    "id": 7
+  }'
+```
+
+**Response Example**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 7,
+  "result": 263
+}
+```
+
+**Response**: Returns the ID of the newly created message (e.g., `263`)
+
+## 7. Field Mapping
 - **name**: Person's name
 - **function**: Position/job title
 - **city**: Location (city)
 - **x_linkedin_profile**: LinkedIn profile URL
+- **image_1920**: Profile photo in base64 format
+- **comment**: Additional notes or headline
 - **message_type**: Type of message (comment, notification, email)
 - **body**: Message content (HTML format)
 - **date**: Timestamp of the message
 - **author_id**: Author information [id, name]
 - **subtype_id**: Message subtype [id, name]
 
-## 7. Notes
+## 8. Notes
 - The API uses Odoo 18 JSON-RPC protocol
 - User ID after authentication is `9`
 - The `city` field appears to be empty in current data

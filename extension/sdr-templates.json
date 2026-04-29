@@ -1,0 +1,14 @@
+{
+  "templates": [
+    {
+      "id": "mall_intelligent_1",
+      "title": "mall_intelligent_1",
+      "content": "Hai Pak {{Name}}, saya Mizan dari visibel.ai. Kami bantu mall membaca pola pengunjung dari CCTV existing dengan AI, private/on-premise. Saya ingin share use case singkat, Boleh connect?"
+    },
+    {
+      "id": "mall_intelligent_2",
+      "title": "mall_intelligent_2",
+      "content": "Hai Pak {{Name}}, saya {{Logged_in_first_name}} dari visibel.ai.\n\nKami membantu mall dan commercial property memanfaatkan AI dari CCTV existing - bukan untuk mengganti sistem security, tapi untuk membaca pola pengunjung seperti people counting, peak hour, estimasi gender & age group, statistik kunjungan, dan heatmap area ramai.\n\nDeployment bisa private/on-premise, tanpa perlu kirim video ke cloud. Saat ini salah satu deployment kami sudah berjalan di lingkungan Agung Sedayu Group.\nSaya ingin share contoh use case singkat yang mungkin relevan.\n\nBoleh saya connect?"
+    }
+  ]
+}
