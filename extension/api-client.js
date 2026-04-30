@@ -29,3 +29,37 @@ function parseJsonRpcResponse(response) {
     }
   });
 }
+
+/**
+ * Run JSON-RPC from the extension service worker when possible so the request is not tied to
+ * the LinkedIn page origin (avoids many HTTP 403 HTML responses from API/WAF on Windows).
+ */
+function jsonRpcCall(bodyObject) {
+  const body = JSON.stringify(bodyObject);
+  return new Promise((resolve, reject) => {
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+      chrome.runtime.sendMessage({ type: 'dgosJsonRpc', body }, response => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        if (!response) {
+          reject(new Error('Empty response from extension background'));
+          return;
+        }
+        if (response.ok) resolve(response.data);
+        else reject(new Error(response.error || 'API request failed'));
+      });
+      return;
+    }
+    fetch(API_BASE_URL, {
+      method: 'POST',
+      headers: jsonRpcRequestHeaders(),
+      body,
+      credentials: 'omit'
+    })
+      .then(parseJsonRpcResponse)
+      .then(resolve)
+      .catch(reject);
+  });
+}

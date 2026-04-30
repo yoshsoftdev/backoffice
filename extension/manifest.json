@@ -3,6 +3,9 @@
   "name": "DGOS Backoffice",
   "version": "1.0",
   "description": "DGOS Backoffice Chrome Extension",
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html"
   },

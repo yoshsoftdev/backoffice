@@ -326,31 +326,26 @@ function getPartnerData(linkedinUrl, callback) {
       return;
     }
     
-    fetch(API_BASE_URL, {
-      method: 'POST',
-      headers: jsonRpcRequestHeaders(),
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'call',
-        params: {
-          service: 'object',
-          method: 'execute_kw',
-          args: [
-            'DGOS',
-            result.userId,
-            result.password,
-            'res.partner',
-            'search_read',
-            [[['x_linkedin_profile', '=', linkedinUrl]]],
-            {
-              fields: ['name', 'function', 'city', 'user_id', 'comment', 'image_128']
-            }
-          ]
-        },
-        id: 1
-      })
+    jsonRpcCall({
+      jsonrpc: '2.0',
+      method: 'call',
+      params: {
+        service: 'object',
+        method: 'execute_kw',
+        args: [
+          'DGOS',
+          result.userId,
+          result.password,
+          'res.partner',
+          'search_read',
+          [[['x_linkedin_profile', '=', linkedinUrl]]],
+          {
+            fields: ['name', 'function', 'city', 'user_id', 'comment', 'image_128']
+          }
+        ]
+      },
+      id: 1
     })
-    .then(parseJsonRpcResponse)
     .then(data => {
       if (data.error) {
         callback(null, data.error.message);
@@ -374,32 +369,27 @@ function getPartnerActivities(partnerId, callback) {
       return;
     }
     
-    fetch(API_BASE_URL, {
-      method: 'POST',
-      headers: jsonRpcRequestHeaders(),
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'call',
-        params: {
-          service: 'object',
-          method: 'execute_kw',
-          args: [
-            'DGOS',
-            result.userId,
-            result.password,
-            'mail.message',
-            'search_read',
-            [[['res_id', '=', partnerId], ['model', '=', 'res.partner']]],
-            {
-              fields: ['message_type', 'body', 'date', 'author_id'],
-              order: 'date desc'
-            }
-          ]
-        },
-        id: 2
-      })
+    jsonRpcCall({
+      jsonrpc: '2.0',
+      method: 'call',
+      params: {
+        service: 'object',
+        method: 'execute_kw',
+        args: [
+          'DGOS',
+          result.userId,
+          result.password,
+          'mail.message',
+          'search_read',
+          [[['res_id', '=', partnerId], ['model', '=', 'res.partner']]],
+          {
+            fields: ['message_type', 'body', 'date', 'author_id'],
+            order: 'date desc'
+          }
+        ]
+      },
+      id: 2
     })
-    .then(parseJsonRpcResponse)
     .then(data => {
       if (data.error) {
         callback(null, data.error.message);
@@ -517,12 +507,7 @@ function addActivity() {
       id: 7
     };
     
-    fetch(API_BASE_URL, {
-      method: 'POST',
-      headers: jsonRpcRequestHeaders(),
-      body: JSON.stringify(payload)
-    })
-    .then(parseJsonRpcResponse)
+    jsonRpcCall(payload)
     .then(responseData => {
       if (responseData.error) {
         alert('Error adding activity: ' + responseData.error.message);
@@ -676,12 +661,7 @@ function savePartnerToBackoffice(data) {
         id: 5
       };
       
-      fetch(API_BASE_URL, {
-        method: 'POST',
-        headers: jsonRpcRequestHeaders(),
-        body: JSON.stringify(payload)
-      })
-      .then(parseJsonRpcResponse)
+      jsonRpcCall(payload)
       .then(responseData => {
         if (responseData.error) {
           alert('Error saving: ' + responseData.error.message);

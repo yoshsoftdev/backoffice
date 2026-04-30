@@ -55,22 +55,16 @@ function handleLogout() {
 }
 
 function authenticate(database, username, password) {
-  return fetch(API_BASE_URL, {
-    method: 'POST',
-    headers: jsonRpcRequestHeaders(),
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'call',
-      params: {
-        service: 'common',
-        method: 'authenticate',
-        args: [database, username, password, {}]
-      },
-      id: 1
-    })
-  })
-  .then(parseJsonRpcResponse)
-  .then(data => {
+  return jsonRpcCall({
+    jsonrpc: '2.0',
+    method: 'call',
+    params: {
+      service: 'common',
+      method: 'authenticate',
+      args: [database, username, password, {}]
+    },
+    id: 1
+  }).then(data => {
     if (data.error) {
       throw new Error(data.error.message || 'Authentication failed');
     }
