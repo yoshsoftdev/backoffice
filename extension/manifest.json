@@ -7,11 +7,18 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://api-backoffice.dgos.id/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://www.linkedin.com/in/*"],
+      "matches": [
+        "https://*.linkedin.com/in/*",
+        "https://linkedin.com/in/*"
+      ],
       "js": ["content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"

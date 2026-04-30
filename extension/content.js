@@ -2,6 +2,39 @@ const API_BASE_URL = 'https://api-backoffice.dgos.id/jsonrpc';
 let extractedProfileData = null;
 let partnerData = null;
 
+/** LinkedIn profile URLs vary by locale (e.g. id.linkedin.com); manifest + init must accept any *.linkedin.com/in/… */
+function isLinkedInProfilePage() {
+  try {
+    const u = new URL(window.location.href);
+    const host = u.hostname.toLowerCase();
+    if (host !== 'linkedin.com' && !host.endsWith('.linkedin.com')) return false;
+    return /^\/in\/[^/]+/.test(u.pathname);
+  } catch {
+    return false;
+  }
+}
+
+function copyTextToClipboard(text) {
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+    } finally {
+      document.body.removeChild(ta);
+    }
+  };
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    return navigator.clipboard.writeText(text).catch(fallback);
+  }
+  return Promise.resolve(fallback());
+}
+
 // SDR Templates
 const sdrTemplates = {
   templates: [
@@ -233,7 +266,7 @@ function attachSDREventListeners() {
       e.stopPropagation();
       const section = e.target.closest('.dgos-sdr-section');
       const text = section.querySelector('.dgos-sdr-text').innerText;
-      navigator.clipboard.writeText(text).then(() => {
+      copyTextToClipboard(text).then(() => {
         const originalIcon = btn.innerHTML;
         btn.innerHTML = `
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -607,8 +640,9 @@ function savePartnerToBackoffice(data) {
         .then(blob => {
           const reader = new FileReader();
           reader.onloadend = () => {
-            const base64data = reader.result;
-            imageBase64 = base64data.split(',')[1];
+            const base64data = String(reader.result || '');
+            const parts = base64data.split(',');
+            imageBase64 = parts.length > 1 ? parts[1] : '';
             createPartner(imageBase64);
           };
           reader.readAsDataURL(blob);
@@ -1032,7 +1066,7 @@ function resetAndInitialize() {
 }
 
 // Initialize when page loads
-if (window.location.href.match(/https:\/\/www\.linkedin\.com\/in\/.+/)) {
+if (isLinkedInProfilePage()) {
   resetAndInitialize();
   
   // Listen for URL changes (LinkedIn SPA navigation)
@@ -1044,7 +1078,7 @@ if (window.location.href.match(/https:\/\/www\.linkedin\.com\/in\/.+/)) {
       lastUrl = currentUrl;
       
       // Check if still on a profile page
-      if (currentUrl.match(/https:\/\/www\.linkedin\.com\/in\/.+/)) {
+      if (isLinkedInProfilePage()) {
         console.log('DGOS: URL changed to profile, resetting...');
         resetAndInitialize();
       } else {
