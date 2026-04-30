@@ -19,7 +19,7 @@
         "https://*.linkedin.com/in/*",
         "https://linkedin.com/in/*"
       ],
-      "js": ["content.js"],
+      "js": ["api-client.js", "content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }

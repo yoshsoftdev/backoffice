@@ -1,4 +1,3 @@
-const API_BASE_URL = 'https://api-backoffice.dgos.id/jsonrpc';
 let extractedProfileData = null;
 let partnerData = null;
 
@@ -329,9 +328,7 @@ function getPartnerData(linkedinUrl, callback) {
     
     fetch(API_BASE_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: jsonRpcRequestHeaders(),
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'call',
@@ -353,7 +350,7 @@ function getPartnerData(linkedinUrl, callback) {
         id: 1
       })
     })
-    .then(response => response.json())
+    .then(parseJsonRpcResponse)
     .then(data => {
       if (data.error) {
         callback(null, data.error.message);
@@ -379,9 +376,7 @@ function getPartnerActivities(partnerId, callback) {
     
     fetch(API_BASE_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: jsonRpcRequestHeaders(),
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'call',
@@ -404,7 +399,7 @@ function getPartnerActivities(partnerId, callback) {
         id: 2
       })
     })
-    .then(response => response.json())
+    .then(parseJsonRpcResponse)
     .then(data => {
       if (data.error) {
         callback(null, data.error.message);
@@ -524,12 +519,10 @@ function addActivity() {
     
     fetch(API_BASE_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: jsonRpcRequestHeaders(),
       body: JSON.stringify(payload)
     })
-    .then(response => response.json())
+    .then(parseJsonRpcResponse)
     .then(responseData => {
       if (responseData.error) {
         alert('Error adding activity: ' + responseData.error.message);
@@ -685,12 +678,10 @@ function savePartnerToBackoffice(data) {
       
       fetch(API_BASE_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: jsonRpcRequestHeaders(),
         body: JSON.stringify(payload)
       })
-      .then(response => response.json())
+      .then(parseJsonRpcResponse)
       .then(responseData => {
         if (responseData.error) {
           alert('Error saving: ' + responseData.error.message);

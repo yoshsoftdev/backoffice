@@ -1,5 +1,3 @@
-const API_BASE_URL = 'https://api-backoffice.dgos.id/jsonrpc';
-
 document.addEventListener('DOMContentLoaded', function() {
   // Check if user is already logged in
   chrome.storage.local.get(['username', 'userId'], function(result) {
@@ -59,9 +57,7 @@ function handleLogout() {
 function authenticate(database, username, password) {
   return fetch(API_BASE_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: jsonRpcRequestHeaders(),
     body: JSON.stringify({
       jsonrpc: '2.0',
       method: 'call',
@@ -73,7 +69,7 @@ function authenticate(database, username, password) {
       id: 1
     })
   })
-  .then(response => response.json())
+  .then(parseJsonRpcResponse)
   .then(data => {
     if (data.error) {
       throw new Error(data.error.message || 'Authentication failed');
